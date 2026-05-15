@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-STUDIO_REPO="${GULITE_STUDIO_REPO:-https://github.com/justinwei/guliteos_studio.git}"
+STUDIO_REPO="${GULITE_STUDIO_REPO:-git@gitlab.gurobot.cn:yunxigu/guliteos_studio.git}"
 STUDIO_DIR_NAME="${GULITE_STUDIO_DIR:-guliteos_studio}"
 INSTALL_DIR="${GULITE_INSTALL_DIR:-$PWD}"
 APP_REPO="${GULITE_APP_REPO:-}"
@@ -34,6 +34,7 @@ Usage:
 For curl pipe bash:
   curl -fsSL https://raw.githubusercontent.com/justinwei/guliteos_studio/main/setup_gulite_studio_env.sh | bash
   The script will prompt for the application repository, application branch, and engine branch.
+  By default, it clones the full Studio repository from git@gitlab.gurobot.cn:yunxigu/guliteos_studio.git.
 
 Options:
   --install-dir <dir>          Parent directory for guliteos_studio. Default: current directory
