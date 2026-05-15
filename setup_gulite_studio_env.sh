@@ -4,12 +4,12 @@ set -Eeuo pipefail
 STUDIO_REPO="${GULITE_STUDIO_REPO:-https://github.com/justinwei/guliteos_studio.git}"
 STUDIO_DIR_NAME="${GULITE_STUDIO_DIR:-guliteos_studio}"
 INSTALL_DIR="${GULITE_INSTALL_DIR:-$PWD}"
-APP_REPO="${GULITE_APP_REPO:-git@gitlab.gurobot.cn:yunxigu/guliteapp-ai-alarmclock.git}"
-APP_BRANCH="${GULITE_APP_BRANCH:-feat/tinglibao_v20260422}"
+APP_REPO="${GULITE_APP_REPO:-}"
+APP_BRANCH="${GULITE_APP_BRANCH:-}"
 APP_DIR_NAME="${GULITE_APP_DIR:-}"
 ENGINE_REPO="${GULITE_ENGINE_REPO:-git@gitlab.gurobot.cn:yunxigu/gulite_app_engine.git}"
 SIMULATOR_REPO="${GULITE_SIMULATOR_REPO:-git@gitlab.gurobot.cn:yunxigu/gulite_simulator.git}"
-ENGINE_BRANCH="${GULITE_ENGINE_BRANCH:-Gulite_SF_2.0.x_performance_optimize}"
+ENGINE_BRANCH="${GULITE_ENGINE_BRANCH:-}"
 SIMULATOR_BRANCH="${GULITE_SIMULATOR_BRANCH:-SDL2_Support}"
 SIMULATOR_VERSION="${GULITE_SIMULATOR_VERSION:-Gulite_SF_2.0.x_performance_optimize}"
 PATCH_REL_PATH="${GULITE_BUILD_ONLY_PATCH:-shell/patch17.x/0001-compile-add-build-only-flag.patch}"
@@ -33,6 +33,7 @@ Usage:
 
 For curl pipe bash:
   curl -fsSL https://raw.githubusercontent.com/justinwei/guliteos_studio/main/setup_gulite_studio_env.sh | bash
+  The script will prompt for the application repository, application branch, and engine branch.
 
 Options:
   --install-dir <dir>          Parent directory for guliteos_studio. Default: current directory
@@ -50,7 +51,7 @@ Options:
   --launch-command <cmd>       Command used to start/check studio
   --skip-launch                Skip studio launch check
   --strict-launch              Fail if no launch command can be detected
-  --non-interactive            Do not prompt; use defaults or provided options
+  --non-interactive            Do not prompt; require needed values through options or environment
   -y, --yes                    Confirm without prompting
   -h, --help                   Show this help
 
@@ -154,7 +155,7 @@ parse_args() {
     esac
   done
 
-  if [[ ! -t 0 ]]; then
+  if [[ ! -t 0 ]] && ! (true < /dev/tty > /dev/tty) 2>/dev/null; then
     NON_INTERACTIVE=1
   fi
 }
