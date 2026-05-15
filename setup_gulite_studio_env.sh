@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-STUDIO_REPO="${GULITE_STUDIO_REPO:-git@gitlab.gurobot.cn:yunxigu/guliteos_studio.git}"
+STUDIO_REPO="${GULITE_STUDIO_REPO:-https://github.com/justinwei/guliteos_studio.git}"
 STUDIO_DIR_NAME="${GULITE_STUDIO_DIR:-guliteos_studio}"
 INSTALL_DIR="${GULITE_INSTALL_DIR:-$PWD}"
-APP_REPO="${GULITE_APP_REPO:-}"
-APP_BRANCH="${GULITE_APP_BRANCH:-}"
+APP_REPO="${GULITE_APP_REPO:-git@gitlab.gurobot.cn:yunxigu/guliteapp-ai-alarmclock.git}"
+APP_BRANCH="${GULITE_APP_BRANCH:-feat/tinglibao_v20260422}"
 APP_DIR_NAME="${GULITE_APP_DIR:-}"
 ENGINE_REPO="${GULITE_ENGINE_REPO:-git@gitlab.gurobot.cn:yunxigu/gulite_app_engine.git}"
 SIMULATOR_REPO="${GULITE_SIMULATOR_REPO:-git@gitlab.gurobot.cn:yunxigu/gulite_simulator.git}"
-ENGINE_BRANCH="${GULITE_ENGINE_BRANCH:-}"
+ENGINE_BRANCH="${GULITE_ENGINE_BRANCH:-Gulite_SF_2.0.x_performance_optimize}"
 SIMULATOR_BRANCH="${GULITE_SIMULATOR_BRANCH:-SDL2_Support}"
 SIMULATOR_VERSION="${GULITE_SIMULATOR_VERSION:-Gulite_SF_2.0.x_performance_optimize}"
 PATCH_REL_PATH="${GULITE_BUILD_ONLY_PATCH:-shell/patch17.x/0001-compile-add-build-only-flag.patch}"
@@ -19,7 +19,7 @@ LAUNCH_TIMEOUT="${GULITE_LAUNCH_TIMEOUT:-25s}"
 STRICT_LAUNCH="${GULITE_STRICT_LAUNCH:-0}"
 
 NON_INTERACTIVE=0
-ASSUME_YES="${GULITE_ASSUME_YES:-0}"
+ASSUME_YES="${GULITE_ASSUME_YES:-1}"
 SKIP_LAUNCH="${GULITE_SKIP_LAUNCH:-0}"
 ALLOWED_ENGINE_BRANCHES=(
   "Gulite_SF_1.17.x"
@@ -29,14 +29,10 @@ ALLOWED_ENGINE_BRANCHES=(
 usage() {
   cat <<'USAGE'
 Usage:
-  setup_gulite_studio_env.sh --app-repo <repo> --app-branch <branch> [options]
+  setup_gulite_studio_env.sh [options]
 
 For curl pipe bash:
-  curl -fsSL <url>/setup_gulite_studio_env.sh | \
-    GULITE_APP_REPO=git@gitlab.gurobot.cn:yunxigu/guliteapp-ai-alarmclock.git \
-    GULITE_APP_BRANCH=feat/tinglibao_v20260422 \
-    GULITE_ASSUME_YES=1 \
-    bash
+  curl -fsSL https://raw.githubusercontent.com/justinwei/guliteos_studio/main/setup_gulite_studio_env.sh | bash
 
 Options:
   --install-dir <dir>          Parent directory for guliteos_studio. Default: current directory
@@ -54,7 +50,7 @@ Options:
   --launch-command <cmd>       Command used to start/check studio
   --skip-launch                Skip studio launch check
   --strict-launch              Fail if no launch command can be detected
-  --non-interactive            Do not prompt; require app repo and branch
+  --non-interactive            Do not prompt; use defaults or provided options
   -y, --yes                    Confirm without prompting
   -h, --help                   Show this help
 
@@ -248,7 +244,7 @@ validate_inputs() {
   fi
 
   if [[ -z "$APP_REPO" || -z "$APP_BRANCH" ]]; then
-    fatal "non-interactive setup needs GULITE_APP_REPO/--app-repo and GULITE_APP_BRANCH/--app-branch"
+    fatal "setup needs GULITE_APP_REPO/--app-repo and GULITE_APP_BRANCH/--app-branch"
   fi
 
   if [[ -z "$APP_DIR_NAME" ]]; then
